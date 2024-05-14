@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">storyapp</string>
+    <string name="app_name">StorieS</string>
+    <string name="password_error">Password must be at least 8 characters</string>
+    <string name="email_error">Not a correct Email format</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="goToRegister">Don\'t have an account? Register</string>
+        <string name="login_button">LOGIN</string>
+
 </resources>
