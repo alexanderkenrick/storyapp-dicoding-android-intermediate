@@ -5,6 +5,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="goToRegister">Don\'t have an account? Register</string>
-        <string name="login_button">LOGIN</string>
+    <string name="login_button">LOGIN</string>
+    <string name="name">Name</string>
+    <string name="register_button">REGISTER</string>
+    <string name="goToLogin">Already has an account? Login</string>
 
 </resources>

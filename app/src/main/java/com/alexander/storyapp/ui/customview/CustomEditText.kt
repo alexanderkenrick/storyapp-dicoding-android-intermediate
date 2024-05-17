@@ -27,7 +27,7 @@ class CustomEditText @JvmOverloads constructor(
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if ((s.length ?: 0) < 8) {
+                if (s.length < 8) {
                     setError(context.getString(R.string.password_error), icon)
                     setCompoundDrawablesWithIntrinsicBounds(null, null, icon, null)
                 } else {
