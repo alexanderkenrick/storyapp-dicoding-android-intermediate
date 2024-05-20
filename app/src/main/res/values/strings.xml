@@ -12,5 +12,7 @@
     <string name="loginEmpty">Email and password can not be empty</string>
     <string name="authInputError">Invalid email and password format</string>
     <string name="loginSuccess">Login Success</string>
-
+    <string name="log_out">Log Out</string>
+    <string name="rvCardName">Name</string>
+    <string name="rvCardDesc">Description</string>
 </resources>

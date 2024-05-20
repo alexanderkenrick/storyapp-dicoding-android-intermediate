@@ -1,6 +1,5 @@
 package com.alexander.storyapp.data.api
 
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,21 +23,16 @@ class ApiConfig {
                 chain.proceed(requestHeaders)
             }
 
-            Log.d("api service", "setelah auth")
-
             val client = OkHttpClient.Builder()
                 .addInterceptor(authInterceptor)
                 .addInterceptor(loggingInterceptor)
                 .build()
-
-            Log.d("api service", "setelah client")
 
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://story-api.dicoding.dev/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-            Log.d("api service", "setelah retrofit")
             return retrofit.create(ApiService::class.java)
         }
     }

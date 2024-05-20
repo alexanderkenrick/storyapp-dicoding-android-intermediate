@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alexander.storyapp.ui.auth.LoginViewModel
 import com.alexander.storyapp.ui.auth.RegisterViewModel
+import com.alexander.storyapp.ui.home.HomeViewModel
+import com.alexander.storyapp.ui.welcome.WelcomeViewModel
 import com.alexander.storyapp.utils.Injection
 
 class ViewModelFactory internal constructor(
@@ -33,8 +35,12 @@ class ViewModelFactory internal constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel(Injection.provideRepository(context)) as T
-        }else if(modelClass.isAssignableFrom(LoginViewModel::class.java)){
+        } else if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(Injection.provideRepository(context)) as T
+        } else if (modelClass.isAssignableFrom(WelcomeViewModel::class.java)) {
+            return WelcomeViewModel(Injection.provideRepository(context)) as T
+        } else if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(Injection.provideRepository(context)) as T
         }
 //        else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
 //            return FavoriteViewModel(mApplication) as T

@@ -67,4 +67,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
 
     implementation("com.squareup.okhttp3:logging-interceptor:3.3.1")
+    implementation(libs.androidx.core.splashscreen)
 }

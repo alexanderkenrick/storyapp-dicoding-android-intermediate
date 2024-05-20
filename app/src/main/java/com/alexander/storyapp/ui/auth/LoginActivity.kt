@@ -2,7 +2,6 @@ package com.alexander.storyapp.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,9 +12,9 @@ import com.alexander.storyapp.R
 import com.alexander.storyapp.data.response.auth.LoginResponse
 import com.alexander.storyapp.databinding.ActivityLoginBinding
 import com.alexander.storyapp.ui.ViewModelFactory
+import com.alexander.storyapp.ui.home.HomeActivity
 import com.alexander.storyapp.utils.UserEntity
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -40,23 +39,24 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
+            binding.btnLogin.isEnabled = false
 
             val email = binding.edLoginEmail.text.toString().trim()
             val password = binding.edLoginPassword.text.toString().trim()
 
             if(binding.edLoginEmail.error != null || binding.edLoginPassword.error != null){
                 showToast(getString(R.string.authInputError))
+                binding.btnLogin.isEnabled = true
                 return@setOnClickListener
             }
 
             if((email.isEmpty() || password.isEmpty())){
+                binding.btnLogin.isEnabled = true
                 showToast(getString(R.string.loginEmpty))
                 return@setOnClickListener
             }
 
-            lifecycleScope.launch(Dispatchers.Main){
-                loginProcess(email, password)
-            }
+            loginProcess(email, password)
 
             with(loginViewModel){
                 isLoading.observe(this@LoginActivity){
@@ -65,32 +65,40 @@ class LoginActivity : AppCompatActivity() {
 
                 loginObject.observe(this@LoginActivity){
                     if (it != null) {
-                        if(it.error){
+                        if (it.error) {
                             showToast(it.message)
                         }else{
-                            val user = UserEntity(it.loginResult.userId.toString(), it.loginResult.name.toString(), it.loginResult.token.toString())
+                            val user = UserEntity(it.loginResult?.userId.toString(), it.loginResult?.name.toString(), it.loginResult?.token.toString())
                             lifecycleScope.launch {
-                                showLoading(true)
                                 loginViewModel.saveSession(user)
-                                showToast("Session Saved")
-                                Log.v("Session save", "SAVED")
+
+                                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                                finish()
                             }
                         }
+                    } else{
+                        showToast("Login Failed")
                     }
                 }
             }
+
+            binding.btnLogin.isEnabled = true
         }
     }
 
-    suspend private fun loginProcess(email : String, password : String){
+    private fun loginProcess(email : String, password : String){
         try {
+            showLoading(true)
             loginViewModel.login(email, password)
-            showToast(getString(R.string.loginSuccess))
-        } catch (e : HttpException){
             showLoading(false)
-            val body = e.response()?.errorBody().toString()
-            val response = Gson().fromJson(body, LoginResponse::class.java)
-            showToast(response.message)
+        } catch (e : HttpException){
+            binding.btnLogin.isEnabled = true
+            showLoading(false)
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            showToast(errorResponse.message)
         }
     }
 

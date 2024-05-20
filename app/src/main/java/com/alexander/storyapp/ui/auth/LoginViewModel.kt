@@ -10,7 +10,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     val loginObject: MutableLiveData<LoginResponse?> = authRepository.loginResult
 
     val isLoading: MutableLiveData<Boolean> = authRepository.isLoading
-    suspend fun login(email : String, password : String){
+    fun login(email : String, password : String){
         return authRepository.login(email, password)
     }
 

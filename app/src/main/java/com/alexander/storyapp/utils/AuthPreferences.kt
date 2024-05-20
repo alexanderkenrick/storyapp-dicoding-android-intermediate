@@ -14,19 +14,27 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "au
 class AuthPreferences private constructor(private val dataStore: DataStore<Preferences>) {
     suspend fun saveAuthSession(user: UserEntity) {
         dataStore.edit { preferences ->
-            preferences[TOKEN] = user.token
             preferences[USER_ID] = user.userId
             preferences[NAME] = user.name
+            preferences[TOKEN] = user.token
         }
     }
 
-    suspend fun getAuthSession(): Flow<UserEntity> {
+    fun getAuthSession(): Flow<UserEntity> {
         return dataStore.data.map { preferences ->
             UserEntity(
-                preferences[TOKEN].toString(),
                 preferences[USER_ID].toString(),
-                preferences[NAME].toString()
+                preferences[NAME].toString(),
+                preferences[TOKEN].toString(),
             )
+        }
+    }
+
+    suspend fun removeSession(){
+        dataStore.edit { preferences ->
+            preferences[USER_ID] = ""
+            preferences[NAME] = ""
+            preferences[TOKEN] = ""
         }
     }
 

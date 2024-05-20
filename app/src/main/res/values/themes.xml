@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.Storyapp" parent="Base.Theme.Storyapp" />
+
+
+    <style name="BackgroundPrimaryColor">
+        <item name="android:background">@color/bgblue</item>
+        <item name="fontFamily">@font/baloo</item>
+        <item name="tint">@color/white</item>
+    </style>
 </resources>

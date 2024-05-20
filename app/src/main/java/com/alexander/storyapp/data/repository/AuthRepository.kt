@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import com.alexander.storyapp.data.api.ApiService
 import com.alexander.storyapp.data.response.auth.LoginResponse
 import com.alexander.storyapp.data.response.auth.RegisterResponse
+import com.alexander.storyapp.data.response.story.Story
+import com.alexander.storyapp.data.response.story.StoryResponse
 import com.alexander.storyapp.utils.AuthPreferences
 import com.alexander.storyapp.utils.UserEntity
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +24,9 @@ class AuthRepository(
     private var _loginResult = MutableLiveData<LoginResponse?>()
     var loginResult: MutableLiveData<LoginResponse?> = _loginResult
 
+    private var _listStory = MutableLiveData<List<Story>>()
+    var listStory: MutableLiveData<List<Story>> = _listStory
+
     suspend fun register(
         email: String,
         password: String,
@@ -29,7 +35,7 @@ class AuthRepository(
         return apiService.register(name, email, password)
     }
 
-    internal fun login(
+    fun login(
         email: String,
         password: String,
     ){
@@ -37,13 +43,15 @@ class AuthRepository(
         val client = apiService.login(email, password)
         client.enqueue(object : Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                _isLoading.value = false
-
                 if(response.isSuccessful){
                     val responseBody = response.body()
                     if(responseBody != null){
                         _loginResult.value = responseBody
+                        _isLoading.value = false
                     }
+                }else{
+                    val responseBody  = response.errorBody()
+                    _isLoading.value = false
                 }
             }
 
@@ -55,8 +63,38 @@ class AuthRepository(
 
     suspend fun saveSession(user : UserEntity){
         authPreferences.saveAuthSession(user)
+        _isLoading.value = false
     }
 
+    fun getSession() : Flow<UserEntity>{
+        return authPreferences.getAuthSession()
+    }
+
+    suspend fun removeSession(){
+        authPreferences.removeSession()
+    }
+
+    fun getStories(){
+        _isLoading.value = true
+        val client = apiService.getStories()
+        client.enqueue(object : Callback<StoryResponse> {
+            override fun onResponse(
+                call: Call<StoryResponse>,
+                response: Response<StoryResponse>
+            ) {
+                if (response.isSuccessful){
+                    _isLoading.value = false
+                    _listStory.value = response.body()?.listStory
+                }
+            }
+
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("Repository", t.message.toString() )
+            }
+
+        })
+    }
 
     companion object {
         @Volatile
