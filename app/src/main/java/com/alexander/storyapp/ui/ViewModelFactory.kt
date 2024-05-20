@@ -3,6 +3,7 @@ package com.alexander.storyapp.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.alexander.storyapp.ui.auth.LoginViewModel
 import com.alexander.storyapp.ui.auth.RegisterViewModel
 import com.alexander.storyapp.utils.Injection
 
@@ -32,6 +33,8 @@ class ViewModelFactory internal constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel(Injection.provideRepository(context)) as T
+        }else if(modelClass.isAssignableFrom(LoginViewModel::class.java)){
+            return LoginViewModel(Injection.provideRepository(context)) as T
         }
 //        else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
 //            return FavoriteViewModel(mApplication) as T

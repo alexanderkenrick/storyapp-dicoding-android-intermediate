@@ -1,11 +1,13 @@
 package com.alexander.storyapp.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.alexander.storyapp.R
 import com.alexander.storyapp.data.response.auth.RegisterResponse
 import com.alexander.storyapp.databinding.ActivityRegisterBinding
 import com.alexander.storyapp.ui.ViewModelFactory
@@ -25,6 +27,13 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.tvToLogin.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            this.finish()
+        }
+
         binding.btnRegister.setOnClickListener {
             val name = binding.edRegisterName.text.toString()
             val email = binding.edRegisterEmail.text.toString()
@@ -32,7 +41,7 @@ class RegisterActivity : AppCompatActivity() {
             showLoading(true)
 
             if((!binding.edRegisterName.text.isEmpty()) && binding.edRegisterEmail.error != null && binding.edRegisterPassword.error != null){
-                showToast("Please enter email and password in correct format")
+                showToast(getString(R.string.authInputError))
             }else{
                 lifecycleScope.launch {
                     try {

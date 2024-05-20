@@ -9,5 +9,8 @@
     <string name="name">Name</string>
     <string name="register_button">REGISTER</string>
     <string name="goToLogin">Already has an account? Login</string>
+    <string name="loginEmpty">Email and password can not be empty</string>
+    <string name="authInputError">Invalid email and password format</string>
+    <string name="loginSuccess">Login Success</string>
 
 </resources>

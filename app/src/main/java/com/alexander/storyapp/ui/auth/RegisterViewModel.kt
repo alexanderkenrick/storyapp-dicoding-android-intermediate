@@ -8,7 +8,6 @@ class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel(
 
 
     suspend fun register(name : String, email : String, password : String): RegisterResponse {
-
         return authRepository.register(email, password, name)
     }
 
