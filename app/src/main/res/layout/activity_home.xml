@@ -48,6 +48,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:background="@color/bgblue"
+        android:contentDescription="@string/fab_button_contentDesc"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

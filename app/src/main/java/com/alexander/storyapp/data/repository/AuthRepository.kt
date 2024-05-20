@@ -50,7 +50,6 @@ class AuthRepository(
                         _isLoading.value = false
                     }
                 }else{
-                    val responseBody  = response.errorBody()
                     _isLoading.value = false
                 }
             }
@@ -71,6 +70,7 @@ class AuthRepository(
     }
 
     suspend fun removeSession(){
+        loginResult.value = null
         authPreferences.removeSession()
     }
 

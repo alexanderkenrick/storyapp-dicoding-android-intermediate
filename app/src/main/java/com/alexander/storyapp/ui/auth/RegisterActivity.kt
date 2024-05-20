@@ -28,34 +28,32 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.tvToLogin.setOnClickListener {
-            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            this.finish()
+            moveToLogin()
         }
 
         binding.btnRegister.setOnClickListener {
+            showLoading(true)
             val name = binding.edRegisterName.text.toString()
             val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
-            showLoading(true)
+
 
             if((!binding.edRegisterName.text.isEmpty()) && binding.edRegisterEmail.error != null && binding.edRegisterPassword.error != null){
                 showToast(getString(R.string.authInputError))
             }else{
                 lifecycleScope.launch {
+                    showLoading(true)
                     try {
-
                         val response = registerViewModel.register(name, email, password)
                         showToast(response.message)
-                    }catch (e : HttpException){
 
+                        moveToLogin()
+                    }catch (e : HttpException){
                         val errorBody = e.response()?.errorBody()?.string()
                         val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
                         showToast(errorResponse.message)
                     }
                 }
-                showLoading(false)
             }
         }
     }
@@ -67,5 +65,12 @@ class RegisterActivity : AppCompatActivity() {
     private fun showToast(message : String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         showLoading(false)
+    }
+
+    private fun moveToLogin(){
+        val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        this.finish()
     }
 }

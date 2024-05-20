@@ -16,4 +16,6 @@
     <string name="log_out">Keluar</string>
     <string name="rvCardName">Nama</string>
     <string name="rvCardDesc">Deskripsi</string>
+    <string name="story_image_desc">Image of the story</string>
+    <string name="fab_button_contentDesc">FAB Button</string>
 </resources>

@@ -8,12 +8,8 @@ import com.alexander.storyapp.R
 import com.alexander.storyapp.ui.ViewModelFactory
 import com.alexander.storyapp.ui.auth.LoginActivity
 import com.alexander.storyapp.ui.home.HomeActivity
-import com.alexander.storyapp.utils.AuthPreferences
-import com.alexander.storyapp.utils.UserEntity
 
 class WelcomeActivity : AppCompatActivity() {
-    private lateinit var user: UserEntity
-    private lateinit var authPref: AuthPreferences
 
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
         ViewModelFactory(applicationContext)
