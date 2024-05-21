@@ -1,5 +1,7 @@
 package com.alexander.storyapp.ui.auth
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -30,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        playAnimation()
 
         binding.tvToRegister.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
@@ -68,10 +71,11 @@ class LoginActivity : AppCompatActivity() {
                         if (it.error) {
                             showToast(it.message)
                         }else{
+                            binding.btnLogin.isEnabled = false
                             val user = UserEntity(it.loginResult?.userId.toString(), it.loginResult?.name.toString(), it.loginResult?.token.toString())
                             lifecycleScope.launch {
                                 loginViewModel.saveSession(user)
-
+                                showToast(getString(R.string.loginSuccess))
                                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)
@@ -109,5 +113,29 @@ class LoginActivity : AppCompatActivity() {
     private fun showToast(message : String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         showLoading(false)
+    }
+
+    private fun playAnimation(){
+        val logo =
+            ObjectAnimator.ofFloat(binding.ivLogo, View.ALPHA, 1f).setDuration(200)
+        val edEmail =
+            ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(200)
+        val edPassword =
+            ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(200)
+        val btnLogin =
+            ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(200)
+        val tvNavigate =
+            ObjectAnimator.ofFloat(binding.tvToRegister, View.ALPHA, 1f).setDuration(200)
+
+        AnimatorSet().apply {
+            playSequentially(
+                logo,
+                edEmail,
+                edPassword,
+                btnLogin,
+                tvNavigate
+            )
+            startDelay = 300
+        }.start()
     }
 }

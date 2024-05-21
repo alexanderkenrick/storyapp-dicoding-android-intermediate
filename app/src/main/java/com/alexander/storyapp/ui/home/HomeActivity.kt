@@ -12,6 +12,7 @@ import com.alexander.storyapp.data.response.story.Story
 import com.alexander.storyapp.databinding.ActivityHomeBinding
 import com.alexander.storyapp.ui.StoryAdapter
 import com.alexander.storyapp.ui.ViewModelFactory
+import com.alexander.storyapp.ui.upload.UploadActivity
 import com.alexander.storyapp.ui.welcome.WelcomeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,9 +52,13 @@ class HomeActivity : AppCompatActivity() {
                     this.finish()
                     true
                 }
-
                 else -> false
             }
+        }
+
+        binding.fbCreate.setOnClickListener {
+            val intent = Intent(this@HomeActivity, UploadActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -64,6 +69,13 @@ class HomeActivity : AppCompatActivity() {
     private fun setStoryList(stories: List<Story>?) {
         val adapter = StoryAdapter()
         adapter.submitList(stories)
+        if (stories == null) {
+            with(binding.tvNotAvail) {
+                visibility = View.VISIBLE
+            }
+        }else {
+            binding.tvNotAvail.visibility = View.GONE
+        }
         binding.rvStory.adapter = adapter
     }
 }

@@ -1,15 +1,20 @@
 package com.alexander.storyapp.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alexander.storyapp.data.api.ApiService
 import com.alexander.storyapp.data.response.auth.LoginResponse
 import com.alexander.storyapp.data.response.auth.RegisterResponse
 import com.alexander.storyapp.data.response.story.Story
 import com.alexander.storyapp.data.response.story.StoryResponse
+import com.alexander.storyapp.data.response.story.UploadResponse
 import com.alexander.storyapp.utils.AuthPreferences
 import com.alexander.storyapp.utils.UserEntity
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +31,9 @@ class AuthRepository(
 
     private var _listStory = MutableLiveData<List<Story>>()
     var listStory: MutableLiveData<List<Story>> = _listStory
+
+    private val _uploadStatus = MutableLiveData<Result<UploadResponse>>()
+    val uploadStatus: LiveData<Result<UploadResponse>> = _uploadStatus
 
     suspend fun register(
         email: String,
@@ -90,9 +98,34 @@ class AuthRepository(
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e("Repository", t.message.toString() )
+                Log.e("Repository GetStory", t.message.toString() )
             }
 
+        })
+    }
+
+    fun uploadStory(image: MultipartBody.Part, description: RequestBody){
+        _isLoading.value = true
+        val client = apiService.uploadStory(image, description)
+        client.enqueue(object : Callback<UploadResponse> {
+            override fun onResponse(
+                call: Call<UploadResponse>,
+                response: Response<UploadResponse>
+            ) {
+                if (response.isSuccessful){
+                    _isLoading.value = false
+                    _uploadStatus.value = Result.success(response.body()!!)
+                } else {
+                    val errorResponse = Gson().fromJson(response.errorBody()?.string(), UploadResponse::class.java)
+                    _uploadStatus.value = Result.failure(Exception(errorResponse.message))
+                }
+            }
+
+            override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
+                _isLoading.value = false
+                _uploadStatus.value = Result.failure(t)
+                Log.e("Repository Upload", t.message.toString() )
+            }
         })
     }
 

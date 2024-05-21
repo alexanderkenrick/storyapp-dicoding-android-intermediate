@@ -16,6 +16,13 @@
     <string name="log_out">Keluar</string>
     <string name="rvCardName">Nama</string>
     <string name="rvCardDesc">Deskripsi</string>
-    <string name="story_image_desc">Image of the story</string>
-    <string name="fab_button_contentDesc">FAB Button</string>
+    <string name="story_image_desc">Gambar dari story</string>
+    <string name="fab_button_contentDesc">Tombol FAB</string>
+    <string name="description_hint">Deskripsi</string>
+    <string name="camera_btn">Kamera</string>
+    <string name="gallery_btn">Galeri</string>
+    <string name="upload_btn">Unggah</string>
+    <string name="upload_success">Unggah berhasil</string>
+    <string name="upload_error">Gambar dan deskripsi tidak boleh kosong</string>
+    <string name="data_not_available">Data not available</string>
 </resources>

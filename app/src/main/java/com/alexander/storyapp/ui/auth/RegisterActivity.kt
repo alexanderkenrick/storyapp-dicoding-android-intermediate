@@ -1,5 +1,7 @@
 package com.alexander.storyapp.ui.auth
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -26,6 +28,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        playAnimation()
 
         binding.tvToLogin.setOnClickListener {
             moveToLogin()
@@ -72,5 +75,32 @@ class RegisterActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         this.finish()
+    }
+
+    private fun playAnimation(){
+        val logo =
+            ObjectAnimator.ofFloat(binding.ivLogo, View.ALPHA, 1f).setDuration(200)
+        val edName =
+            ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(200)
+        val edEmail =
+            ObjectAnimator.ofFloat(binding.edRegisterEmail, View.ALPHA, 1f).setDuration(200)
+        val edPassword =
+            ObjectAnimator.ofFloat(binding.edRegisterPassword, View.ALPHA, 1f).setDuration(200)
+        val btnRegister =
+            ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(200)
+        val tvNavigate =
+            ObjectAnimator.ofFloat(binding.tvToLogin, View.ALPHA, 1f).setDuration(200)
+
+        AnimatorSet().apply {
+            playSequentially(
+                logo,
+                edName,
+                edEmail,
+                edPassword,
+                btnRegister,
+                tvNavigate
+            )
+            startDelay = 300
+        }.start()
     }
 }

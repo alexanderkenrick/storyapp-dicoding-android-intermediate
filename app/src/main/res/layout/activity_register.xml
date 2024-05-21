@@ -7,34 +7,37 @@
     android:layout_height="match_parent"
     tools:context=".ui.auth.RegisterActivity">
 
-    <TextView
-        android:id="@+id/text_welcome"
+    <ImageView
+        android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
-        android:fontFamily="@font/baloo"
-        android:text="@string/app_name"
-        android:textSize="60sp"
+        android:layout_marginTop="64dp"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/logo"
+        tools:alpha="100"/>
+
 
     <EditText
         android:id="@+id/ed_register_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="name"
         android:ems="10"
-        android:inputType="text"
         android:fontFamily="@font/poppins"
         android:hint="@string/name"
-        android:autofillHints="name"
+        android:inputType="text"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_welcome" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo"
+        tools:alpha="100"/>
 
     <com.alexander.storyapp.ui.customview.CustomEditTextEmail
         android:id="@+id/ed_register_email"
@@ -46,9 +49,11 @@
         android:fontFamily="@font/poppins"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_register_name" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_name"
+        tools:alpha="100"/>
 
     <com.alexander.storyapp.ui.customview.CustomEditText
         android:id="@+id/ed_register_password"
@@ -60,10 +65,12 @@
         android:fontFamily="@font/poppins"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_register_email" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_email"
+        tools:alpha="100"/>
 
     <Button
         android:id="@+id/btn_register"
@@ -72,13 +79,16 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
+        style="@style/button_color"
         android:text="@string/register_button"
         android:textSize="20sp"
         android:fontFamily="@font/poppins"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_register_password" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
+        tools:alpha="100"/>
 
     <TextView
         android:id="@+id/tv_toLogin"
@@ -86,9 +96,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/goToLogin"
+        android:alpha="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_register"
+        tools:alpha="100" />
 
     <ProgressBar
         android:id="@+id/pg_loading"

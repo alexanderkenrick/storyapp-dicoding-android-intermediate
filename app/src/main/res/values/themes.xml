@@ -3,14 +3,25 @@
     <style name="Base.Theme.Storyapp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="backgroundColor">#444444</item>
+
     </style>
 
     <style name="Theme.Storyapp" parent="Base.Theme.Storyapp" />
+
+    <style name="logo">
+        <item name="srcCompat">@drawable/ic_logo_inside</item>
+    </style>
 
 
     <style name="BackgroundPrimaryColor">
         <item name="android:background">@color/bgblue</item>
         <item name="fontFamily">@font/baloo</item>
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="button_color">
+        <item name="android:backgroundTint">#00D1CD</item>
     </style>
 </resources>

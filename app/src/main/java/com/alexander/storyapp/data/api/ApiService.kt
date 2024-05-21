@@ -3,11 +3,16 @@ package com.alexander.storyapp.data.api
 import com.alexander.storyapp.data.response.auth.LoginResponse
 import com.alexander.storyapp.data.response.auth.RegisterResponse
 import com.alexander.storyapp.data.response.story.StoryResponse
+import com.alexander.storyapp.data.response.story.UploadResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface ApiService {
     @FormUrlEncoded
@@ -27,4 +32,11 @@ interface ApiService {
 
     @GET("stories")
     fun getStories(): Call<StoryResponse>
+
+    @Multipart
+    @POST("stories")
+    fun uploadStory(
+        @Part image: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+    ): Call<UploadResponse>
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.alexander.storyapp.R
 import com.alexander.storyapp.ui.ViewModelFactory
 import com.alexander.storyapp.ui.auth.LoginActivity
@@ -14,12 +15,11 @@ class WelcomeActivity : AppCompatActivity() {
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
         ViewModelFactory(applicationContext)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_welcome)
-
-        Thread.sleep(3000)
 
         welcomeViewModel.getSession().observe(this){
             if(it.token.isEmpty()){
