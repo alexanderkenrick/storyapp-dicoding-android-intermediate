@@ -21,9 +21,9 @@ class WelcomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         welcomeViewModel.getSession().observe(this){
-            if(it.token.isEmpty()){
+            if(it.token.isEmpty() || it.token == "null"){
                 navigateTo(LoginActivity::class.java)
-            }else{
+            }else if(it.token != "null"){
                 navigateTo(HomeActivity::class.java)
             }
         }
