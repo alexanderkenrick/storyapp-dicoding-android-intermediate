@@ -12,7 +12,7 @@ import com.alexander.storyapp.ui.home.HomeActivity
 class WelcomeActivity : AppCompatActivity() {
 
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
-        ViewModelFactory.getIn
+        ViewModelFactory(applicationContext)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
