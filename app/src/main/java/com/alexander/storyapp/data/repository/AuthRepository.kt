@@ -128,18 +128,4 @@ class AuthRepository(
             }
         })
     }
-
-    companion object {
-        @Volatile
-        private var instance: AuthRepository? = null
-
-        fun clearInstance() {
-            instance = null
-        }
-
-        fun getInstance(apiService: ApiService, authPreferences: AuthPreferences): AuthRepository =
-            instance ?: synchronized(this) {
-                instance ?: AuthRepository(apiService, authPreferences)
-            }.also { instance = it }
-    }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.alexander.storyapp.R
 import com.alexander.storyapp.ui.ViewModelFactory
 import com.alexander.storyapp.ui.auth.LoginActivity
 import com.alexander.storyapp.ui.home.HomeActivity
@@ -13,7 +12,7 @@ import com.alexander.storyapp.ui.home.HomeActivity
 class WelcomeActivity : AppCompatActivity() {
 
     private val welcomeViewModel by viewModels<WelcomeViewModel> {
-        ViewModelFactory(applicationContext)
+        ViewModelFactory.getIn
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

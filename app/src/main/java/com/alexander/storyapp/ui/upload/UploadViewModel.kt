@@ -8,7 +8,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class UploadViewModel(private val authRepository: AuthRepository) : ViewModel() {
-    var isLoading : LiveData<Boolean> = authRepository.isLoading
     val uploadStatus: LiveData<Result<UploadResponse>> = authRepository.uploadStatus
 
     fun uploadStory(image: MultipartBody.Part, description: RequestBody){
