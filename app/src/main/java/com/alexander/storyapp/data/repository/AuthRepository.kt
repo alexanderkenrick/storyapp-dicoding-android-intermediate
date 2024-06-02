@@ -1,9 +1,15 @@
 package com.alexander.storyapp.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.alexander.storyapp.data.api.ApiService
+import com.alexander.storyapp.data.database.StoryDatabase
+import com.alexander.storyapp.data.paging.StoryRemoteMediator
 import com.alexander.storyapp.data.response.auth.LoginResponse
 import com.alexander.storyapp.data.response.auth.RegisterResponse
 import com.alexander.storyapp.data.response.story.Story
@@ -21,7 +27,8 @@ import retrofit2.Response
 
 class AuthRepository(
     private val apiService: ApiService,
-    private val authPreferences: AuthPreferences
+    private val authPreferences: AuthPreferences,
+    private val storyDatabase: StoryDatabase
 ) {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: MutableLiveData<Boolean> = _isLoading
@@ -39,84 +46,108 @@ class AuthRepository(
         email: String,
         password: String,
         name: String
-    ) : RegisterResponse {
+    ): RegisterResponse {
         return apiService.register(name, email, password)
     }
 
     fun login(
         email: String,
         password: String,
-    ){
+    ) {
         _isLoading.value = true
         val client = apiService.login(email, password)
-        client.enqueue(object : Callback<LoginResponse>{
+        client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if(responseBody != null){
+                    if (responseBody != null) {
                         _loginResult.value = responseBody
                         _isLoading.value = false
                     }
-                }else{
+                } else {
                     _isLoading.value = false
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Log.e("AuthRepository Login", t.message.toString())
+
             }
         })
     }
 
-    suspend fun saveSession(user : UserEntity){
+    suspend fun saveSession(user: UserEntity) {
         authPreferences.saveAuthSession(user)
         _isLoading.value = false
     }
 
-    fun getSession() : Flow<UserEntity>{
+    fun getSession(): Flow<UserEntity> {
         return authPreferences.getAuthSession()
     }
 
-    suspend fun removeSession(){
+    suspend fun removeSession() {
         loginResult.value = null
         authPreferences.removeSession()
     }
 
-    fun getStories(){
-        _isLoading.value = true
-        val client = apiService.getStories()
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(
-                call: Call<StoryResponse>,
-                response: Response<StoryResponse>
-            ) {
-                if (response.isSuccessful){
-                    _isLoading.value = false
-                    _listStory.value = response.body()?.listStory
-                }
-            }
+//    fun getStories(){
+//        _isLoading.value = true
+//        val client = apiService.getStories()
+//        client.enqueue(object : Callback<StoryResponse> {
+//            override fun onResponse(
+//                call: Call<StoryResponse>,
+//                response: Response<StoryResponse>
+//            ) {
+//                if (response.isSuccessful){
+//                    _isLoading.value = false
+//                    _listStory.value = response.body()?.listStory
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+//                _isLoading.value = false
+//                Log.e("Repository GetStory", t.message.toString() )
+//            }
+//
+//        })
+//    }
 
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e("Repository GetStory", t.message.toString() )
+    fun getStories(): LiveData<PagingData<Story>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
+            pagingSourceFactory = {
+                storyDatabase.storyDao().getStories()
             }
-
-        })
+        ).liveData
     }
 
-    fun uploadStory(image: MultipartBody.Part, description: RequestBody){
+    suspend fun getStoriesLocation(): com.alexander.storyapp.utils.Result<StoryResponse> {
+        return try {
+            val response = apiService.getStoriesWithLocation()
+            com.alexander.storyapp.utils.Result.Success(response)
+        } catch (e: Exception) {
+            com.alexander.storyapp.utils.Result.Error(e.message ?: "Error while retrieving data")
+        }
+    }
+
+
+    fun uploadStory(image: MultipartBody.Part, description: RequestBody, lat: RequestBody?= null, lon: RequestBody?=null) {
         _isLoading.value = true
-        val client = apiService.uploadStory(image, description)
+        val client = apiService.uploadStory(image, description, lat,  lon)
         client.enqueue(object : Callback<UploadResponse> {
             override fun onResponse(
                 call: Call<UploadResponse>,
                 response: Response<UploadResponse>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     _isLoading.value = false
                     _uploadStatus.value = Result.success(response.body()!!)
                 } else {
-                    val errorResponse = Gson().fromJson(response.errorBody()?.string(), UploadResponse::class.java)
+                    val errorResponse =
+                        Gson().fromJson(response.errorBody()?.string(), UploadResponse::class.java)
                     _uploadStatus.value = Result.failure(Exception(errorResponse.message))
                 }
             }
@@ -124,7 +155,6 @@ class AuthRepository(
             override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
                 _isLoading.value = false
                 _uploadStatus.value = Result.failure(t)
-                Log.e("Repository Upload", t.message.toString() )
             }
         })
     }

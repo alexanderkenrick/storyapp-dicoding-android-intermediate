@@ -24,5 +24,7 @@
     <string name="upload_btn">Unggah</string>
     <string name="upload_success">Unggah berhasil</string>
     <string name="upload_error">Gambar dan deskripsi tidak boleh kosong</string>
-    <string name="data_not_available">Data not available</string>
+    <string name="data_not_available">Data tidak tersedia</string>
+    <string name="map">Peta</string>
+    <string name="upload_with_current_location">Unggah dengan lokasi sekarang</string>
 </resources>

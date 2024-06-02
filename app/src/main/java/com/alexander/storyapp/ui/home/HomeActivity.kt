@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alexander.storyapp.R
-import com.alexander.storyapp.data.response.story.Story
 import com.alexander.storyapp.databinding.ActivityHomeBinding
 import com.alexander.storyapp.ui.StoryAdapter
 import com.alexander.storyapp.ui.ViewModelFactory
+import com.alexander.storyapp.ui.maps.MapsActivity
 import com.alexander.storyapp.ui.upload.UploadActivity
 import com.alexander.storyapp.ui.welcome.WelcomeActivity
 import kotlinx.coroutines.Dispatchers
@@ -31,9 +31,7 @@ class HomeActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        homeViewModel.getStories().observe(this){
-            setStoryList(it)
-        }
+        setStoryList()
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
@@ -52,6 +50,11 @@ class HomeActivity : AppCompatActivity() {
                     this.finish()
                     true
                 }
+                R.id.btn_map ->{
+                    val intent = Intent(this@HomeActivity, MapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
@@ -66,16 +69,19 @@ class HomeActivity : AppCompatActivity() {
         binding.pgLoading.visibility = if(status) View.VISIBLE else View.GONE
     }
 
-    private fun setStoryList(stories: List<Story>?) {
+    private fun setStoryList() {
         val adapter = StoryAdapter()
-        adapter.submitList(stories)
-        if (stories == null) {
-            with(binding.tvNotAvail) {
-                visibility = View.VISIBLE
-            }
-        }else {
-            binding.tvNotAvail.visibility = View.GONE
-        }
         binding.rvStory.adapter = adapter
+
+        homeViewModel.story.observe(this) {
+            adapter.submitData(lifecycle, it)
+            if (it == null) {
+                with(binding.tvNotAvail) {
+                    visibility = View.VISIBLE
+                }
+            } else {
+                binding.tvNotAvail.visibility = View.GONE
+            }
+        }
     }
 }

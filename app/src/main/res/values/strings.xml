@@ -24,4 +24,7 @@
     <string name="upload_success">Upload successful</string>
     <string name="upload_error">Image and description can not be empty</string>
     <string name="data_not_available">Data not available</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="map">Map</string>
+    <string name="upload_with_current_location">Upload with current location</string>
 </resources>

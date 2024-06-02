@@ -10,7 +10,12 @@ import okhttp3.RequestBody
 class UploadViewModel(private val authRepository: AuthRepository) : ViewModel() {
     val uploadStatus: LiveData<Result<UploadResponse>> = authRepository.uploadStatus
 
-    fun uploadStory(image: MultipartBody.Part, description: RequestBody){
-        return authRepository.uploadStory(image, description)
+    fun uploadStory(
+        image: MultipartBody.Part,
+        description: RequestBody,
+        lat: RequestBody?,
+        lon: RequestBody?
+    ) {
+        return authRepository.uploadStory(image, description, lat, lon)
     }
 }
