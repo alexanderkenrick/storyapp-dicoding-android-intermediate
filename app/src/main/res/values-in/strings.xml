@@ -27,4 +27,5 @@
     <string name="data_not_available">Data tidak tersedia</string>
     <string name="map">Peta</string>
     <string name="upload_with_current_location">Unggah dengan lokasi sekarang</string>
+    <string name="title_activity_maps">Peta</string>
 </resources>

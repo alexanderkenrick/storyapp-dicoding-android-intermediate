@@ -210,7 +210,5 @@ class UploadActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
-        private const val REQUIRED_PERMISSION_LOCATION_FINE = Manifest.permission.ACCESS_FINE_LOCATION
-        private const val REQUIRED_PERMISSION_LOCATION_COARSE = Manifest.permission.ACCESS_COARSE_LOCATION
     }
 }

@@ -36,9 +36,6 @@ class AuthRepository(
     private var _loginResult = MutableLiveData<LoginResponse?>()
     var loginResult: MutableLiveData<LoginResponse?> = _loginResult
 
-    private var _listStory = MutableLiveData<List<Story>>()
-    var listStory: MutableLiveData<List<Story>> = _listStory
-
     private val _uploadStatus = MutableLiveData<Result<UploadResponse>>()
     val uploadStatus: LiveData<Result<UploadResponse>> = _uploadStatus
 
