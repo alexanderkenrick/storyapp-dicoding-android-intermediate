@@ -31,9 +31,6 @@ interface ApiService {
         @Field("password") password: String
     ): Call<LoginResponse>
 
-//    @GET("stories")
-//    fun getStories(): Call<StoryResponse>
-
     @Multipart
     @POST("stories")
     fun uploadStory(

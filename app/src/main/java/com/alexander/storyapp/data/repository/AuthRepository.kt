@@ -86,28 +86,6 @@ class AuthRepository(
         authPreferences.removeSession()
     }
 
-//    fun getStories(){
-//        _isLoading.value = true
-//        val client = apiService.getStories()
-//        client.enqueue(object : Callback<StoryResponse> {
-//            override fun onResponse(
-//                call: Call<StoryResponse>,
-//                response: Response<StoryResponse>
-//            ) {
-//                if (response.isSuccessful){
-//                    _isLoading.value = false
-//                    _listStory.value = response.body()?.listStory
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e("Repository GetStory", t.message.toString() )
-//            }
-//
-//        })
-//    }
-
     fun getStories(): LiveData<PagingData<Story>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
